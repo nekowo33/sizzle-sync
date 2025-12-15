@@ -34,6 +34,12 @@ namespace SizzleSyncPOS
                 return;
             }
 
+            if (price < 0)
+            {
+                Console.WriteLine("Error: Price cannot be negative.");
+                return;
+            }
+
             if (quantity <= 0)
             {
                 Console.WriteLine("Error: Quantity must be greater than zero.");

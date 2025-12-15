@@ -16,12 +16,12 @@ namespace SizzleSyncPOS
     class Program
     {
         // Global instances for the POS system
-        private static MenuSystem menu;
-        private static OrderQueue orderQueue;
-        private static OrderSystem currentOrder;
-        private static List<CompletedOrder> completedOrders;
-        private static string currentCustomer;
-        private static string currentTable;
+        private static MenuSystem menu = null!;
+        private static OrderQueue orderQueue = null!;
+        private static OrderSystem? currentOrder;
+        private static List<CompletedOrder> completedOrders = null!;
+        private static string? currentCustomer;
+        private static string? currentTable;
         private static int currentOrderNumber;
 
         static void Main(string[] args)
@@ -59,7 +59,7 @@ namespace SizzleSyncPOS
             do
             {
                 DisplayMainMenu();
-                string choice = Console.ReadLine();
+                string choice = Console.ReadLine() ?? string.Empty;
 
                 switch (choice)
                 {
@@ -162,35 +162,44 @@ namespace SizzleSyncPOS
         {
             Console.WriteLine("\n--- CREATE NEW ORDER ---");
             Console.Write("Enter customer name: ");
-            string customerName = Console.ReadLine();
+            string? customerName = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(customerName))
+            {
+                Console.WriteLine("Error: Customer name cannot be empty.");
+                return;
+            }
 
             Console.Write("Enter table number: ");
-            string tableNumber = Console.ReadLine();
+            string? tableNumber = Console.ReadLine();
 
-            if (!string.IsNullOrWhiteSpace(customerName) && !string.IsNullOrWhiteSpace(tableNumber))
+            if (string.IsNullOrWhiteSpace(tableNumber))
             {
-                int orderNum = orderQueue.AddOrder(customerName, tableNumber);
+                Console.WriteLine("Error: Table number cannot be empty.");
+                return;
+            }
 
-                if (orderNum > 0)
+            int orderNum = orderQueue.AddOrder(customerName, tableNumber);
+
+            if (orderNum > 0)
+            {
+                // If no current order, process this one immediately from the queue
+                if (currentCustomer == null)
                 {
-                    // If no current order, make this the active one
-                    if (currentCustomer == null)
+                    PendingOrder pendingOrder = orderQueue.ProcessNextOrder();
+                    if (pendingOrder != null)
                     {
-                        currentCustomer = customerName;
-                        currentTable = tableNumber;
-                        currentOrderNumber = orderNum;
-                        currentOrder = new OrderSystem(orderNum);
+                        currentCustomer = pendingOrder.CustomerName;
+                        currentTable = pendingOrder.TableNumber;
+                        currentOrderNumber = pendingOrder.OrderNumber;
+                        currentOrder = new OrderSystem(pendingOrder.OrderNumber);
                         Console.WriteLine($"\n✓ Order #{orderNum} is now active. Ready to add items!");
                     }
-                    else
-                    {
-                        Console.WriteLine($"\n✓ Order #{orderNum} added to queue. Complete current order first.");
-                    }
                 }
-            }
-            else
-            {
-                Console.WriteLine("Customer name and table number are required.");
+                else
+                {
+                    Console.WriteLine($"\n✓ Order #{orderNum} added to queue. Complete current order first.");
+                }
             }
         }
 
@@ -214,7 +223,15 @@ namespace SizzleSyncPOS
             while (addingItems)
             {
                 Console.Write("\nEnter menu item number (or 0 to finish): ");
-                if (int.TryParse(Console.ReadLine(), out int itemNumber))
+                string? input = Console.ReadLine();
+                
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    Console.WriteLine("Please enter a valid number.");
+                    continue;
+                }
+                
+                if (int.TryParse(input, out int itemNumber))
                 {
                     if (itemNumber == 0)
                     {
@@ -226,23 +243,42 @@ namespace SizzleSyncPOS
                         decimal itemPrice = menu.GetItemPrice(itemNumber);
 
                         Console.Write($"Enter quantity for {itemName}: ");
-                        if (int.TryParse(Console.ReadLine(), out int quantity) && quantity > 0)
+                        string? qtyInput = Console.ReadLine();
+                        
+                        if (string.IsNullOrWhiteSpace(qtyInput))
                         {
-                            currentOrder.AddItem(itemName, itemPrice, quantity);
+                            Console.WriteLine("Error: Quantity cannot be empty.");
+                            continue;
+                        }
+                        
+                        if (int.TryParse(qtyInput, out int quantity))
+                        {
+                            if (quantity > 0 && quantity <= 100)
+                            {
+                                currentOrder.AddItem(itemName, itemPrice, quantity);
+                            }
+                            else if (quantity > 100)
+                            {
+                                Console.WriteLine("Error: Quantity cannot exceed 100.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Error: Quantity must be greater than zero.");
+                            }
                         }
                         else
                         {
-                            Console.WriteLine("Invalid quantity.");
+                            Console.WriteLine("Error: Please enter a valid number for quantity.");
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Invalid menu item number.");
+                        Console.WriteLine($"Error: Please enter a number between 1 and {menu.GetMenuItemCount()}.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Please enter a valid number.");
+                    Console.WriteLine("Error: Please enter a valid number.");
                 }
             }
         }
@@ -307,15 +343,15 @@ namespace SizzleSyncPOS
             decimal total = currentOrder.CalculateTotal();
             List<OrderItem> items = currentOrder.GetAllItems();
 
-            // Print receipt
-            PrintReceipt(currentOrderNumber, currentCustomer, currentTable, items, total);
+            // Print receipt (null checks already done at method start)
+            PrintReceipt(currentOrderNumber, currentCustomer!, currentTable!, items, total);
 
             // Save to completed orders
             CompletedOrder completed = new CompletedOrder
             {
                 OrderNumber = currentOrderNumber,
-                CustomerName = currentCustomer,
-                TableNumber = currentTable,
+                CustomerName = currentCustomer!,
+                TableNumber = currentTable!,
                 Items = items,
                 Total = total,
                 CompletedTime = DateTime.Now
@@ -335,9 +371,9 @@ namespace SizzleSyncPOS
             {
                 Console.WriteLine("\n--- Next Order Ready ---");
                 Console.Write("Process next order from queue? (y/n): ");
-                string response = Console.ReadLine();
+                string? response = Console.ReadLine();
 
-                if (response?.ToLower() == "y")
+                if (!string.IsNullOrWhiteSpace(response) && response.ToLower() == "y")
                 {
                     ProcessNextOrder();
                 }
@@ -450,9 +486,10 @@ namespace SizzleSyncPOS
 
             Console.WriteLine("────────────────────────────────────────────────────────────");
             Console.WriteLine($"TOTAL SALES: PHP{totalSales:F2}");
-            Console.WriteLine($"AVERAGE ORDER: PHP{(completedOrders.Count > 0 ? totalSales / completedOrders.Count : 0):F2}");
+            decimal averageOrder = completedOrders.Count > 0 ? totalSales / completedOrders.Count : 0;
+            Console.WriteLine($"AVERAGE ORDER: PHP{averageOrder:F2}");
             Console.WriteLine($"TOTAL ITEMS SOLD: {totalItems}");
-            Console.WriteLine("════════════════════════════════════════════════════════════");
+            Console.WriteLine("═══════════════════════════════════════════════════════════=");
         }
 
         /// <summary>
@@ -472,7 +509,9 @@ namespace SizzleSyncPOS
             try
             {
                 string fileName = $"SizzleSync_Sales_{DateTime.Now:yyyyMMdd}.txt";
-                using (StreamWriter writer = new StreamWriter(fileName))
+                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+                
+                using (StreamWriter writer = new StreamWriter(fullPath))
                 {
                     writer.WriteLine("╔════════════════════════════════════════════════════════════╗");
                     writer.WriteLine("║           SIZZLESYNC DAILY SALES REPORT                    ║");
@@ -485,14 +524,22 @@ namespace SizzleSyncPOS
 
                     foreach (var order in completedOrders)
                     {
+                        if (order == null) continue;
+                        
                         writer.WriteLine($"ORDER #{order.OrderNumber}");
-                        writer.WriteLine($"Customer: {order.CustomerName} | Table: {order.TableNumber}");
+                        writer.WriteLine($"Customer: {order.CustomerName ?? "N/A"} | Table: {order.TableNumber ?? "N/A"}");
                         writer.WriteLine($"Completed: {order.CompletedTime:yyyy-MM-dd HH:mm:ss}");
                         writer.WriteLine("Items:");
 
-                        foreach (var item in order.Items)
+                        if (order.Items != null)
                         {
-                            writer.WriteLine($"  - {item.ItemName} x{item.Quantity} @ ₱{item.Price:F2} = ₱{item.Subtotal:F2}");
+                            foreach (var item in order.Items)
+                            {
+                                if (item != null)
+                                {
+                                    writer.WriteLine($"  - {item.ItemName} x{item.Quantity} @ ₱{item.Price:F2} = ₱{item.Subtotal:F2}");
+                                }
+                            }
                         }
 
                         writer.WriteLine($"Order Total: PHP{order.Total:F2}");
@@ -502,10 +549,23 @@ namespace SizzleSyncPOS
                     }
 
                     writer.WriteLine($"\nTOTAL DAILY SALES: PHP{totalSales:F2}");
-                    writer.WriteLine($"AVERAGE ORDER VALUE: PHP{totalSales / completedOrders.Count:F2}");
+                    decimal averageOrderValue = completedOrders.Count > 0 ? totalSales / completedOrders.Count : 0;
+                    writer.WriteLine($"AVERAGE ORDER VALUE: PHP{averageOrderValue:F2}");
                 }
 
-                Console.WriteLine($"✓ Sales records saved successfully to: {fileName}");
+                Console.WriteLine($"✓ Sales records saved successfully to: {fullPath}");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("Error: Access denied. Please check file permissions.");
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Console.WriteLine("Error: Directory not found. Please check the path.");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Error: Unable to write file - {ex.Message}");
             }
             catch (Exception ex)
             {
@@ -532,9 +592,9 @@ namespace SizzleSyncPOS
     public class CompletedOrder
     {
         public int OrderNumber { get; set; }
-        public string CustomerName { get; set; }
-        public string TableNumber { get; set; }
-        public List<OrderItem> Items { get; set; }
+        public string CustomerName { get; set; } = string.Empty;
+        public string TableNumber { get; set; } = string.Empty;
+        public List<OrderItem> Items { get; set; } = new List<OrderItem>();
         public decimal Total { get; set; }
         public DateTime CompletedTime { get; set; }
     }
