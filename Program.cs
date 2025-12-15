@@ -131,16 +131,16 @@ namespace SizzleSyncPOS
             Console.WriteLine("\n╔════════════════════════════════════════════════════════════╗");
             Console.WriteLine("║                        MAIN MENU                           ║");
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
-            Console.WriteLine("  [1]  Create New Order (Add to Queue)");
-            Console.WriteLine("  [2]  Add Items to Current Order (Stack Push)");
-            Console.WriteLine("  [3]  Remove Last Item (Stack Pop - Correction Feature)");
+            Console.WriteLine("  [1]  Create New Order");
+            Console.WriteLine("  [2]  Add Items to Current Order");
+            Console.WriteLine("  [3]  Remove Last Item");
             Console.WriteLine("  [4]  View Current Order Details");
             Console.WriteLine("  [5]  Complete Order & Generate Receipt");
-            Console.WriteLine("  [6]  View Pending Orders Queue (Queue Display)");
-            Console.WriteLine("  [7]  Process Next Order (Queue Dequeue)");
-            Console.WriteLine("  [8]  Display Restaurant Menu (Arrays)");
+            Console.WriteLine("  [6]  View Pending Orders Queue");
+            Console.WriteLine("  [7]  Process Next Order");
+            Console.WriteLine("  [8]  Display Restaurant Menu");
             Console.WriteLine("  [9]  View Daily Sales Summary");
-            Console.WriteLine("  [10] Save Sales Records to File (Local Storage)");
+            Console.WriteLine("  [10] Save Sales Records to File");
             Console.WriteLine("  [11] Exit Application");
             Console.WriteLine("════════════════════════════════════════════════════════════");
 
@@ -247,7 +247,7 @@ namespace SizzleSyncPOS
                         string fullItemName = itemName;
                         if (!string.IsNullOrWhiteSpace(variation))
                         {
-                            fullItemName = $"{itemName} w/ {variation}";
+                            fullItemName = $"{itemName} ({variation})";
                         }
 
                         Console.Write($"Enter quantity for {fullItemName}: ");

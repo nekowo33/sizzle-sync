@@ -103,28 +103,28 @@ namespace SizzleSyncPOS
             itemAddOns = new string[20][];
 
             // Appetizers add-ons
-            itemAddOns[0] = new string[] { "Sweet Chili Sauce", "Garlic Mayo" };
+            itemAddOns[0] = new string[] { "w/ Sweet Chili Sauce", "w/ Garlic Mayo" };
             itemAddOns[1] = new string[] { "Buffalo", "BBQ", "Honey Garlic" };
-            itemAddOns[2] = new string[] { "Mayonnaise", "Vinegar" };
-            itemAddOns[3] = new string[] { "Extra Cheese", "Jalapeños", "Sour Cream" };
-            itemAddOns[4] = new string[] { "Extra Butter", "Parmesan" };
+            itemAddOns[2] = new string[] { "w/ Mayonnaise", "w/ Vinegar" };
+            itemAddOns[3] = new string[] { "w/ Extra Cheese", "w/ Jalapeños", "w/ Sour Cream" };
+            itemAddOns[4] = new string[] { "w/ Extra Butter", "w/ Parmesan" };
 
             // Main courses add-ons
-            itemAddOns[5] = new string[] { "Garlic Rice", "Plain Rice" };
-            itemAddOns[6] = new string[] { "Mushroom Sauce", "Pepper Sauce", "Garlic Rice" };
-            itemAddOns[7] = new string[] { "Gravy", "Steamed Veggies" };
-            itemAddOns[8] = new string[] { "Lemon Butter", "Rice" };
-            itemAddOns[9] = new string[] { "Extra Cheese", "Garlic Bread" };
+            itemAddOns[5] = new string[] { "w/ Garlic Rice", "w/ Plain Rice" };
+            itemAddOns[6] = new string[] { "w/ Mushroom Sauce", "w/ Pepper Sauce", "w/ Garlic Rice" };
+            itemAddOns[7] = new string[] { "w/ Gravy", "w/ Steamed Veggies" };
+            itemAddOns[8] = new string[] { "w/ Lemon Butter", "w/ Rice" };
+            itemAddOns[9] = new string[] { "w/ Extra Cheese", "w/ Garlic Bread" };
 
             // Desserts add-ons
-            itemAddOns[10] = new string[] { "Extra Frosting", "Sprinkles" };
+            itemAddOns[10] = new string[] { "w/ Extra Frosting", "w/ Sprinkles" };
             itemAddOns[11] = new string[] { "Chocolate", "Vanilla", "Ube", "Mango" };
-            itemAddOns[12] = new string[] { "Extra Leche Flan", "Extra Ice Cream" };
-            itemAddOns[13] = new string[] { "Caramel Drizzle" };
-            itemAddOns[14] = new string[] { "Extra Cream" };
+            itemAddOns[12] = new string[] { "w/ Extra Leche Flan", "w/ Extra Ice Cream" };
+            itemAddOns[13] = new string[] { "w/ Caramel Drizzle" };
+            itemAddOns[14] = new string[] { "w/ Extra Cream" };
 
             // Beverages add-ons
-            itemAddOns[15] = new string[] { "Lemon", "Extra Ice" };
+            itemAddOns[15] = new string[] { "w/ Lemon", "w/ Extra Ice" };
             itemAddOns[16] = new string[] { "Coke", "Sprite", "Royal" };
             itemAddOns[17] = new string[] { "Orange", "Mango", "Pineapple", "Watermelon" };
             itemAddOns[18] = new string[] { "Black", "With Cream", "Iced" };
@@ -160,7 +160,7 @@ namespace SizzleSyncPOS
                 {
                     for (int j = 0; j < itemAddOns[i].Length; j++)
                     {
-                        Console.WriteLine($"      w/ {itemAddOns[i][j]}");
+                        Console.WriteLine($"      - {itemAddOns[i][j]}");
                     }
                 }
             }
@@ -245,7 +245,7 @@ namespace SizzleSyncPOS
             
             for (int i = 0; i < itemAddOns[index].Length; i++)
             {
-                Console.WriteLine($"  [{i + 1}] w/ {itemAddOns[index][i]}");
+                Console.WriteLine($"  [{i + 1}] {itemAddOns[index][i]}");
             }
 
             Console.Write("\nYour choice: ");

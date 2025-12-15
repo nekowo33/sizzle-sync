@@ -12,3 +12,4 @@ C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\refint\Sizzle
 C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\SizzleSync.pdb
 C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\SizzleSync.genruntimeconfig.cache
 C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\ref\SizzleSync.dll
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\SizzleSync.sourcelink.json
