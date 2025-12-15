@@ -1,0 +1,14 @@
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\bin\Debug\net8.0\SizzleSync.exe
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\bin\Debug\net8.0\SizzleSync.deps.json
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\bin\Debug\net8.0\SizzleSync.runtimeconfig.json
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\bin\Debug\net8.0\SizzleSync.dll
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\bin\Debug\net8.0\SizzleSync.pdb
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\SizzleSync.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\SizzleSync.AssemblyInfoInputs.cache
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\SizzleSync.AssemblyInfo.cs
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\SizzleSync.csproj.CoreCompileInputs.cache
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\SizzleSync.dll
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\refint\SizzleSync.dll
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\SizzleSync.pdb
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\SizzleSync.genruntimeconfig.cache
+C:\Users\marie\source\repos\SizzleSync\SizzleSync\obj\Debug\net8.0\ref\SizzleSync.dll
