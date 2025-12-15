@@ -138,7 +138,7 @@ namespace SizzleSyncPOS
         {
             Console.WriteLine("\n╔════════════════════════════════════════════════════════════╗");
             Console.WriteLine("║                 SIZZLESYNC RESTAURANT MENU                 ║");
-            Console.WriteLine("╚════════════════════════════════════════════════════════════╝\n");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
 
             string currentCategory = "";
             for (int i = 0; i < menuItems.Length; i++)
@@ -147,62 +147,31 @@ namespace SizzleSyncPOS
                 if (menuCategories[i] != currentCategory)
                 {
                     currentCategory = menuCategories[i];
-                    Console.WriteLine($"\n===== {currentCategory.ToUpper()} =====");
+                    Console.WriteLine($"\n┌─────────────────────────────────────────────────────────┐");
+                    Console.WriteLine($"│  {currentCategory.ToUpper(),-54}│");
+                    Console.WriteLine($"└─────────────────────────────────────────────────────────┘");
                 }
 
-                Console.WriteLine($"[{i + 1,2}] {menuItems[i],-25} PHP{menuPrices[i],7:F2}");
-            }
+                // Print item number, name, and price on the main line
+                Console.WriteLine($"\n [{i + 1,2}] {menuItems[i],-30} PHP {menuPrices[i],6:F2}");
 
-            Console.WriteLine("\n╔════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║              MENU BOARD LAYOUT (2D Array)                  ║");
-            Console.WriteLine("╚════════════════════════════════════════════════════════════╝\n");
-
-            string[] categoryNames = { "APPETIZERS", "MAIN COURSES", "DESSERTS", "BEVERAGES" };
-
-            for (int row = 0; row < menuBoard.GetLength(0); row++)
-            {
-                Console.WriteLine($"{categoryNames[row]}:");
-                // Print two items per line with extra spacing; handle odd count
-                for (int col = 0; col < menuBoard.GetLength(1); col += 2)
-                {
-                    string left = menuBoard[row, col];
-                    string right = (col + 1 < menuBoard.GetLength(1)) ? menuBoard[row, col + 1] : null;
-
-                    if (right != null)
-                    {
-                        // Three leading spaces, left column padded to align the right column
-                        Console.WriteLine($"   {left,-24}{right}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"   {left}");
-                    }
-                }
-                Console.WriteLine();
-            }
-
-            Console.WriteLine("\n╔════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║            ITEM ADD-ONS/VARIATIONS (Jagged Array)          ║");
-            Console.WriteLine("╚════════════════════════════════════════════════════════════╝\n");
-
-
-            for (int i = 0; i < itemAddOns.Length; i++)
-            {
-                // Print item name
-                Console.WriteLine($"{menuItems[i]}");
-
-                // Print add-ons on the next line with indentation, each prefixed by '#'
+                // Print add-ons/variations indented below the item
                 if (itemAddOns[i] != null && itemAddOns[i].Length > 0)
                 {
-                    string addons = string.Join(", ", itemAddOns[i].Select(a => $"#{a}"));
-                    Console.WriteLine($"   {addons}");
+                    Console.Write("      Available: ");
+                    for (int j = 0; j < itemAddOns[i].Length; j++)
+                    {
+                        Console.Write($"{itemAddOns[i][j]}");
+                        if (j < itemAddOns[i].Length - 1)
+                        {
+                            Console.Write(" • ");
+                        }
+                    }
+                    Console.WriteLine();
                 }
-
-                // Blank line between entries for readability
-                Console.WriteLine();
             }
 
-            Console.WriteLine();
+            Console.WriteLine("\n════════════════════════════════════════════════════════════");
         }
 
         /// <summary>
