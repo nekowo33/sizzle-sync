@@ -242,7 +242,15 @@ namespace SizzleSyncPOS
                         string itemName = menu.GetItemName(itemNumber);
                         decimal itemPrice = menu.GetItemPrice(itemNumber);
 
-                        Console.Write($"Enter quantity for {itemName}: ");
+                        // Ask for variation if available
+                        string? variation = menu.SelectVariation(itemNumber);
+                        string fullItemName = itemName;
+                        if (!string.IsNullOrWhiteSpace(variation))
+                        {
+                            fullItemName = $"{itemName} w/ {variation}";
+                        }
+
+                        Console.Write($"Enter quantity for {fullItemName}: ");
                         string? qtyInput = Console.ReadLine();
                         
                         if (string.IsNullOrWhiteSpace(qtyInput))
@@ -255,7 +263,7 @@ namespace SizzleSyncPOS
                         {
                             if (quantity > 0 && quantity <= 100)
                             {
-                                currentOrder.AddItem(itemName, itemPrice, quantity);
+                                currentOrder.AddItem(fullItemName, itemPrice, quantity);
                             }
                             else if (quantity > 100)
                             {

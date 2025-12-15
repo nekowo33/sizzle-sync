@@ -155,19 +155,13 @@ namespace SizzleSyncPOS
                 // Print item number, name, and price on the main line
                 Console.WriteLine($"\n [{i + 1,2}] {menuItems[i],-30} PHP {menuPrices[i],6:F2}");
 
-                // Print add-ons/variations indented below the item
+                // Print add-ons/variations indented below the item, each on its own line
                 if (itemAddOns[i] != null && itemAddOns[i].Length > 0)
                 {
-                    Console.Write("      Available: ");
                     for (int j = 0; j < itemAddOns[i].Length; j++)
                     {
-                        Console.Write($"{itemAddOns[i][j]}");
-                        if (j < itemAddOns[i].Length - 1)
-                        {
-                            Console.Write(" • ");
-                        }
+                        Console.WriteLine($"      w/ {itemAddOns[i][j]}");
                     }
-                    Console.WriteLine();
                 }
             }
 
@@ -231,6 +225,54 @@ namespace SizzleSyncPOS
             {
                 return itemAddOns[index];
             }
+            return null;
+        }
+
+        /// <summary>
+        /// Displays variations for an item and prompts user to select one.
+        /// Returns the selected variation or null if no variations or user skips.
+        /// </summary>
+        public string SelectVariation(int itemNumber)
+        {
+            int index = itemNumber - 1;
+            if (index < 0 || index >= itemAddOns.Length || itemAddOns[index] == null || itemAddOns[index].Length == 0)
+            {
+                return null;
+            }
+
+            Console.WriteLine($"\nSelect variation for {menuItems[index]}:");
+            Console.WriteLine("  [0] No variation (plain)");
+            
+            for (int i = 0; i < itemAddOns[index].Length; i++)
+            {
+                Console.WriteLine($"  [{i + 1}] w/ {itemAddOns[index][i]}");
+            }
+
+            Console.Write("\nYour choice: ");
+            string? input = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return null;
+            }
+
+            if (int.TryParse(input, out int choice))
+            {
+                if (choice == 0)
+                {
+                    return null; // No variation
+                }
+                else if (choice >= 1 && choice <= itemAddOns[index].Length)
+                {
+                    return itemAddOns[index][choice - 1];
+                }
+                else
+                {
+                    Console.WriteLine("Invalid choice. No variation selected.");
+                    return null;
+                }
+            }
+
             return null;
         }
 
